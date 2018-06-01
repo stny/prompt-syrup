@@ -1,0 +1,34 @@
+precmd_func() {
+  if [[ -n "$TMUX" ]]
+  then
+  fi
+}
+
+NEWLINE='
+'
+CURSOR_OFF=$'%{\e[?25l%}'
+CURSOR_ON=$'%{\e[?25h%}'
+CPL=$'%{\e[1F%}'
+
+prompt_syrup_setup() {
+  autoload -Uz add-zsh-hook
+  add-zsh-hook precmd precmd_func
+  add-zsh-hook chpwd chpwd_func
+
+  prompt_opts=(cr percent sp subst)
+
+  POSTEDIT=$'\n'
+
+  if [[ -n "$TMUX" ]]
+  then
+    PROMPT=$'${CURSOR_OFF}${NEWLINE}${NEWLINE}${CPL}${CURSOR_ON}%F{220}%(?..[%?] )%b%F{240}❯%f '
+    RPROMPT=$''
+  else
+    PROMPT=$'${CURSOR_OFF}${NEWLINE}${NEWLINE}${CPL}${CURSOR_ON}%F{220}%(?..[%?] )%b%F{240}❯%f '
+    RPROMPT=$'%F{240}[%(3~,%-1~/.../%1~,%~)]%f'
+  fi
+}
+
+prompt_syrup_setup "$@"
+
+# vim: ft=zsh sw=2 ts=2 et :
